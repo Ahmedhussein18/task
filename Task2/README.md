@@ -160,6 +160,9 @@ kubectl get pods -A
 Set firewall rules to allow acces on port 6443 only from the master:
 ```sh
 sudo ufw allow from 172.16.11.128 to any port 6443
+sudo ufw allow from 172.16.11.128 to any port 2379
+sudo ufw allow 30000:32767     # NodePort range
+sudo ufw allow 10250/tcp       # Kubelet
 ```
 
 Denying any other ip:
