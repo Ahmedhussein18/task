@@ -34,15 +34,15 @@ test:
   stage: test
   script:
     - pip install pytest
-    - pytest || echo "No Tests Found..."
-  allow_failure: false  
+    - pytest
+  # allow_failure: true  
 
 code-scan:
   stage: code-scan
   script:
     - pip install bandit
     - bandit -r .
-  allow_failure: true  
+  # allow_failure: true  
 
 deploy-files:
   stage: deploy-files

@@ -313,22 +313,24 @@ spec:
 Apply:
 
 ```sh
-kubectl apply -f juice-shop-ingress.yaml
+kubectl apply -f ngress.yaml
 ```
+![Test Ingress](screenshots/apply_ingress.png)
 
 ### Test Ingress
 
-Find the ingress controller’s external IP:
+![Test Ingress](screenshots/test_ingress.png)
 
-```sh
-kubectl get svc -n ingress-nginx
-```
+
 ---
 
 ## Step 10 Monitoring:
 ### A. Metrics & Cluster Health
 #### **Tools**: Prometheus + Grafana  
 - **Purpose**: Track node/pod resource usage and cluster health.  
+- **Components**:
+  - **Prometheus**: Collects cluster metrics.
+  - **Grafana**: Provides dashboards for visualization.
 - **Key Metrics to Track**:
 
   - **Node Health**: CPU, memory, and disk utilization.
@@ -336,27 +338,17 @@ kubectl get svc -n ingress-nginx
   - **API Server**: Request rates, error rates, and latency.
   - **Juice Shop**: HTTP request/response metrics (if exposed).
 
-- **Setup**
-- Prometheus and Grafana are deployed using **Helm**.
-- Prometheus collects cluster metrics, while Grafana provides dashboards for visualization.
-
 ### B. Logging
 #### **Tools**: EFK Stack (Elasticsearch + Fluentd + Kibana) / ELK Stack (Elasticsearch + Logstash + Kibana)
 - **Purpose**: Aggregate and analyze logs from Kubernetes components and Juice Shop.
 
-#### **Components**:
-  - **Fluentd/Fluent Bit**: Lightweight log collectors (DaemonSet on nodes).
-  - **Logstash** (if using ELK): Processes and transforms logs before indexing.
+- **Components**:
   - **Elasticsearch**: Central log storage and indexing.
+  - **Fluentd/Logstash**: log collectors (DaemonSet on nodes).
   - **Kibana**: Log visualization and querying.
 
-#### **Key Logs to Monitor**:
+- **Key Logs to Monitor**:
   - **Kubernetes**: API server audit logs, scheduler/controller-manager errors.
   - **Juice Shop**: HTTP access logs, authentication failures, 5xx errors.
-
-### C. Setup
-- EFK/ELK stack is deployed using **Helm**.
-- Fluentd/Fluent Bit collects logs from pods and sends them to Elasticsearch.
-- Kibana is used to visualize logs with dashboards and queries.
 
 ---
