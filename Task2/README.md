@@ -157,18 +157,9 @@ kubectl get pods -A
 ![Node Access](screenshots/node_access.png)
 
 
-Ensure API Server only listens to the master:
+Set firewall rules to allow acces on port 6443 only from the master:
 ```sh
-sudo vim /etc/kubernetes/manifests/kube-apiserver.yaml
-```
-Add this line:
-```sh
-- --bind-address=172.16.11.128
-```
-
-Set firewall rules to allow acces on port 6443 only from our network:
-```sh
-sudo ufw allow from 172.16.11.0/24 to any port 6443
+sudo ufw allow from 172.16.11.128 to any port 6443
 ```
 
 Denying any other ip:
