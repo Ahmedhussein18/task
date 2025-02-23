@@ -25,7 +25,7 @@ Before running the pipeline, ensure the following are set up:
 
 ### **Prepare Stage**
 Installs dependencies and sets up the application:
-yaml
+```yaml
 prepare:
   stage: prepare
   script:
@@ -39,33 +39,33 @@ prepare:
   artifacts:
     paths:
       - $BUILD_DIR
-
+```
 
 ### **Test Stage**
 Runs **pytest** to ensure application functionality:
-yaml
+```yaml
 test:
   stage: test
   script:
     - pip install pytest
     - pytest || echo "No Tests Found..."
-  allow_failure: false
-
+#   allow_failure: true
+```
 
 ### **Code Scan Stage**
 Uses **Bandit** to scan for Python security issues:
-yaml
+```yaml
 code-scan:
   stage: code-scan
   script:
     - pip install bandit
     - bandit -r .
-  allow_failure: true
-
+#   allow_failure: true
+```
 
 ### **Deploy Files to EC2 Server**
 Transfers built artifacts to the staging server:
-yaml
+```yaml
 deploy-files:
   stage: deploy-files
   image: alpine:latest
@@ -77,11 +77,11 @@ deploy-files:
     - ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
     - scp -r $BUILD_DIR/* $EC2_USER@$EC2_HOST:/home/$EC2_USER
   needs: ["prepare", "test", "code-scan"]
-
+```
 
 ### **Build Docker Image**
 Creates a Docker image from the application:
-yaml
+```yaml
 build_docker_image:
   stage: docker-build
   image: docker:latest
@@ -94,11 +94,11 @@ build_docker_image:
     paths:
       - image.tar
   needs: ["code-scan", "prepare", "test"]
-
+```
 
 ### **Scan Docker Image for Vulnerabilities**
 Uses **Trivy** to check for security vulnerabilities:
-yaml
+```yaml
 docker-scan:
   stage: docker-scan
   image:
@@ -108,11 +108,11 @@ docker-scan:
     - trivy image --input image.tar --exit-code 1 --severity HIGH,CRITICAL
   allow_failure: true
   needs: ["build_docker_image"]
-
+```
 
 ### **Push Docker Image to Docker Hub**
 Uploads the built image to Docker Hub:
-yaml
+```yaml
 docker-push:
   stage: docker-push
   image: docker:latest
@@ -124,3 +124,4 @@ docker-push:
     - docker load -i image.tar
     - docker push $DOCKER_IMAGE:$DOCKER_TAG
   needs: ["docker-scan", "build_docker_image"]
+```  
