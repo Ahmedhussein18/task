@@ -37,15 +37,6 @@ Apply changes:
 sudo sysctl -p
 ```
 
-### Allow Necessary Firewall Rules
-
-```sh
-sudo ufw allow 6443/tcp  # API server
-sudo ufw allow 2379:2380/tcp  # etcd
-sudo ufw allow 10250/tcp  # Kubelet
-sudo ufw enable
-```
-
 ---
 
 ## Step 2: Install containerd
